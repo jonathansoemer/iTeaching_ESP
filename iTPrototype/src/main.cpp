@@ -3,12 +3,12 @@
 #include <HTTPClient.h>
 #include <DHT.h>
 
-// Wi-Fi credentials
-const char* ssid = "rudlieb16";
-const char* password = "DeadBeef123$";
+// Wi-Fi credentials REPLACE HERE
+const char* ssid = "WLan-AABJ";
+const char* password = "AAbj26201413!!!!";
 
 // Web server URL
-const char* serverName = "https://i-teaching-next.vercel.app/api/data"; // Replace with your server URL
+const char* serverName = "https://i-teaching-next.vercel.app/api/data";
 
 // DHT sensor configuration
 #define DHTPIN 4       // Digital pin connected to the DHT sensor
@@ -32,18 +32,17 @@ void setup() {
 }
 
 void loop() {
-  // Wait a few seconds between measurements.
-  delay(2000);
+  // Wait 5min (=300000ms) between measurements.
+  delay(300000);
 
-  // Reading temperature and humidity
-  float h = 1234;
-  float t = 1234;
-
-  // // Check if any reads failed and exit early (to try again).
-  // if (isnan(h) || isnan(t)) {
-  //   Serial.println("Failed to read from DHT sensor!");
-  //   return;
-  // }
+  float h = dht.readHumidity();
+  float t = dht.readTemperature();
+  Serial.println(t);  
+  // Check if any reads failed and exit early (to try again).
+  if (isnan(h) || isnan(t)) {
+    Serial.println("Failed to read from DHT sensor!");
+    return;
+  }
 
   // Print temperature and humidity
   Serial.print("Humidity: ");
@@ -63,7 +62,7 @@ void loop() {
     http.addHeader("Content-Type", "application/json");
 
     // Prepare JSON payload
-    String httpRequestData = "{\"data\": {\"temperature\": \"" + String(t) + "\"}}";
+    String httpRequestData = "{\"data\": {\"temperature\": \"" + String(t) + "\", \"humidity\": \"" + String(h) + "\"}}";
     Serial.print("HTTP Request data: ");
     Serial.println(httpRequestData);
 
